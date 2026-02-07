@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="HireMe.Api/HireMe.Api.csproj" />
+  <Project Path="HireMe.Application/HireMe.Application.csproj" />
+  <Project Path="HireMe.Domain/HireMe.Domain.csproj" />
+  <Project Path="HireMe.Infrastructure/HireMe.Infrastructure.csproj" />
+</Solution>

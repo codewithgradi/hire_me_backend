@@ -1,0 +1,6 @@
+@main_url = http://localhost:5052
+
+GET {{main_url}}
+Accept: application/json
+
+###
