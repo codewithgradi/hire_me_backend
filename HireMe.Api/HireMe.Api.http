@@ -2,5 +2,21 @@
 
 GET {{main_url}}
 Accept: application/json
-
 ###
+POST  {{main_url}}/api/auth/login
+Accept: application/json
+###
+POST {{main_url}}/api/auth/register
+Accept: application/json
+###
+POST  {{main_url}}/api/auth/logout
+Accept: application/json
+###
+GET {{main_url}}/api/profile/email
+Accept: application/json
+###
+POST  {{main_url}}/api/profile
+Accept: application/json
+###
+PUT  {{main_url}}/api/profile/id
+Accept: application/json
