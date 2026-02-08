@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\desktop\\hireme\\HireMe.Domain\\HireMe.Domain.csproj": {}
+    "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Domain\\HireMe.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\desktop\\hireme\\HireMe.Domain\\HireMe.Domain.csproj": {
+    "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Domain\\HireMe.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\desktop\\hireme\\HireMe.Domain\\HireMe.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Domain\\HireMe.Domain.csproj",
         "projectName": "HireMe.Domain",
-        "projectPath": "C:\\Users\\User\\desktop\\hireme\\HireMe.Domain\\HireMe.Domain.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Domain\\HireMe.Domain.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\desktop\\hireme\\HireMe.Domain\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"

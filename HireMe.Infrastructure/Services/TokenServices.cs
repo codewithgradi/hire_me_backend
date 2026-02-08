@@ -5,40 +5,39 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace HireMe.Application;
-
 public class TokenService : ITokenService
 {
   private readonly IConfiguration _config;
   private readonly SymmetricSecurityKey _key;
-  public TokenService(IConfiguration configuration)
+  public TokenService(IConfiguration config)
   {
-    _config = configuration;
-    _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]!));
+    _config = config;//to pull staf from appsetings json
+    _key = new SymmetricSecurityKey
+    (Encoding.UTF8.GetBytes
+    (_config["JWT:SigningKey"]!));
   }
-
   public string CreateToken(AppUser user)
   {
     var claims = new List<Claim>
     {
       new Claim(JwtRegisteredClaimNames.NameId,user.Id),
-      new Claim(JwtRegisteredClaimNames.Email,user.Email!)
+      new Claim(JwtRegisteredClaimNames.Email,user.Email!),
     };
-    var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+    var creds = new SigningCredentials
+    (_key, SecurityAlgorithms.HmacSha512Signature);
     var tokenDescriptor = new SecurityTokenDescriptor
     {
       Subject = new ClaimsIdentity(claims),
       Expires = DateTime.Now.AddMinutes(60),
       SigningCredentials = creds,
-      Issuer = _config["JWT:Issuer"],
-      Audience = _config["JWT:Audience"]
-    };
+      Issuer = Env.JWT.Issuer,
+      Audience = Env.JWT.Audience
 
+    };
     var tokenHandler = new JwtSecurityTokenHandler();
     var token = tokenHandler.CreateToken(tokenDescriptor);
     return tokenHandler.WriteToken(token);
   }
-
   public string GenerateRefreshToken()
   {
     var randomNumber = new byte[64];
@@ -46,4 +45,5 @@ public class TokenService : ITokenService
     rng.GetBytes(randomNumber);
     return Convert.ToBase64String(randomNumber);
   }
+
 }

@@ -1549,11 +1549,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\desktop\\hireme\\HireMe.Application\\HireMe.Application.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Application\\HireMe.Application.csproj",
       "projectName": "HireMe.Application",
-      "projectPath": "C:\\Users\\User\\desktop\\hireme\\HireMe.Application\\HireMe.Application.csproj",
+      "projectPath": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Application\\HireMe.Application.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\desktop\\hireme\\HireMe.Application\\obj\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Application\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -1568,8 +1568,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\User\\desktop\\hireme\\HireMe.Domain\\HireMe.Domain.csproj": {
-              "projectPath": "C:\\Users\\User\\desktop\\hireme\\HireMe.Domain\\HireMe.Domain.csproj"
+            "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Domain\\HireMe.Domain.csproj": {
+              "projectPath": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Domain\\HireMe.Domain.csproj"
             }
           }
         }
