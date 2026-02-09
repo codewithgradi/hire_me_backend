@@ -1,9 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
+using dotenv.net;
+
+DotEnv.Load();
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Config = builder.Configuration;
 
 builder.Services.AddControllers();
 
