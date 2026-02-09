@@ -1,13 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
 namespace HireMe.Infrastructure;
 
 public class AppDbContext : IdentityDbContext<AppUser>
 {
-  public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-  {
-  }
+  public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
   protected override void OnModelCreating(ModelBuilder builder)
   {
     base.OnModelCreating(builder);

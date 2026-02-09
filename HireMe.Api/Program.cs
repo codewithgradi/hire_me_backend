@@ -3,6 +3,8 @@ using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Env.Config = builder.Configuration;
+
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
