@@ -27,12 +27,11 @@ public class AppDbContext : IdentityDbContext<AppUser>
       Id="c7b013f0-5201-4317-abd8-c211f91b7330",
       Name="USER",
       NormalizedName= "User"
-    };
+    }
+  };
     builder.Entity<IdentityRole>().HasData(roles);
-
-  }
   }
   public DbSet<UserProfile> UserProfiles { get; set; }
 
-  
+
 }
