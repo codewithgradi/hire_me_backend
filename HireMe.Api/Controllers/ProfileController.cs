@@ -27,7 +27,7 @@ public class ProfileController : ControllerBase
     if (string.IsNullOrEmpty(userId)) return Unauthorized();
     addUser.AppUserId = userId;
     addUser.Email = User.FindFirstValue(ClaimTypes.Email);
-    var user = await _profileRepo.AddUserProfileAsync(userId, addUser);
+    var user = await _profileRepo.AddUserProfileAsync(addUser.AppUserId, addUser);
     if (user == null) return BadRequest();
     return Ok(user);
   }

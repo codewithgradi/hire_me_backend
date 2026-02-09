@@ -13,6 +13,7 @@ public class UserProfileRepo : IUserProfileRepo
   {
     if (await ProfileExists(appId)) return null;
     var model = userProfileDto.ToUserProfileFromAdd();
+    model.AppUserId = appId;
     await _context.UserProfiles.AddAsync(model);
     await _context.SaveChangesAsync();
 
@@ -29,20 +30,26 @@ public class UserProfileRepo : IUserProfileRepo
 
   public async Task<UserProfileDto> UpdateUserProfileAsync(int id, UpdateUserProfileDto updatedProfile)
   {
-    var UserProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Id == id);
-    if (UserProfile == null) return null!;
-    UserProfile.GitHubUrl = updatedProfile.GitHubUrl;
-    UserProfile.FirstName = updatedProfile.FirstName;
-    UserProfile.Surname = updatedProfile.Surname;
-    UserProfile.Email = updatedProfile.Email!;
-    UserProfile.PhoneNumber = updatedProfile.PhoneNumber;
-    UserProfile.Qualification = updatedProfile.Qualification;
-    UserProfile.LinkedInUrl = updatedProfile.LinkedInUrl;
-    UserProfile.PersonalWebsite = updatedProfile.PersonalWebsite;
-    UserProfile.Institution = updatedProfile.Institution;
-    _context.UserProfiles.Update(UserProfile);
+    var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Id == id);
+    if (userProfile == null) return null!;
+
+    // Basic validation: Don't allow overwriting with NULL if the DB requires it
+    if (!string.IsNullOrEmpty(updatedProfile.Email))
+    {
+      userProfile.Email = updatedProfile.Email;
+    }
+
+    userProfile.GitHubUrl = updatedProfile.GitHubUrl;
+    userProfile.FirstName = updatedProfile.FirstName;
+    userProfile.Surname = updatedProfile.Surname;
+    userProfile.PhoneNumber = updatedProfile.PhoneNumber;
+    userProfile.Qualification = updatedProfile.Qualification;
+    userProfile.LinkedInUrl = updatedProfile.LinkedInUrl;
+    userProfile.PersonalWebsite = updatedProfile.PersonalWebsite;
+    userProfile.Institution = updatedProfile.Institution;
+
     await _context.SaveChangesAsync();
-    return UserProfile.ToUserProfileDto();
+    return userProfile.ToUserProfileDto();
   }
   public async Task<bool> ProfileExists(string appUserId)
   {

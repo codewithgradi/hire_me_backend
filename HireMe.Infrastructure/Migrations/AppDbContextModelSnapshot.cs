@@ -123,14 +123,14 @@ namespace HireMe.Infrastructure.Migrations
                         new
                         {
                             Id = "fab4fac1-c546-41de-aebc-a14da401b7e4",
-                            ConcurrencyStamp = "dedab73c-5f09-4264-a340-667a65c5e30e",
+                            ConcurrencyStamp = "f5c3dda3-7ff2-4dbd-81e7-bb42b6d97b28",
                             Name = "ADMIN",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "c7b013f0-5201-4317-abd8-c211f91b7330",
-                            ConcurrencyStamp = "cce182f2-fd6a-4183-ae1d-bf4b509679d4",
+                            ConcurrencyStamp = "583c5072-0e61-435a-b639-a051e4f189b8",
                             Name = "USER",
                             NormalizedName = "USER"
                         });
