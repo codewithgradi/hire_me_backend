@@ -9,22 +9,22 @@ public class UserProfileRepo : IUserProfileRepo
     _context = context;
   }
 
-  public async Task<UserProfile> AddUserProfileAsync(AddUserProfileDto userProfileDto)
+  public async Task<UserProfileDto> AddUserProfileAsync(AddUserProfileDto userProfileDto)
   {
     await _context.UserProfiles.AddAsync(userProfileDto.ToUserProfile());
     await _context.SaveChangesAsync();
-    return userProfileDto.ToUserProfile();
+    return userProfileDto.ToUserProfileDtoFromAdd();
   }
 
 
-  public async Task<UserProfile?> GetByEmailAsync(string email)
+  public async Task<UserProfileDto?> GetByEmailAsync(string email)
   {
     var UserProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Email == email);
     if (UserProfile == null) return null;
-    return UserProfile;
+    return UserProfile.ToUserProfileDto();
   }
 
-  public async Task<UserProfile> UpdateUserProfileAsync(Guid id, UpdateUserProfileDto updatedProfile)
+  public async Task<UserProfileDto> UpdateUserProfileAsync(int id, UpdateUserProfileDto updatedProfile)
   {
     var UserProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Id == id);
     if (UserProfile == null) return null!;
@@ -39,7 +39,7 @@ public class UserProfileRepo : IUserProfileRepo
     UserProfile.Institution = updatedProfile.Institution;
     _context.UserProfiles.Update(UserProfile);
     await _context.SaveChangesAsync();
-    return UserProfile;
+    return UserProfile.ToUserProfileDto();
   }
 }
 

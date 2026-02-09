@@ -12,7 +12,7 @@ Accept: application/json
 POST  {{main_url}}/api/auth/logout
 Accept: application/json
 ###
-GET {{main_url}}/api/profile/email
+GET {{main_url}}/api/profile
 Accept: application/json
 ###
 POST  {{main_url}}/api/profile

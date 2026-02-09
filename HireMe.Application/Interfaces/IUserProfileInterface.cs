@@ -1,6 +1,6 @@
 public interface IUserProfileRepo
 {
-  Task<UserProfile?> GetByEmailAsync(string email);
-  Task<UserProfile> AddUserProfileAsync(AddUserProfileDto userProfileDto);
-  Task<UserProfile> UpdateUserProfileAsync(Guid id, UpdateUserProfileDto updatedProfile);
+  Task<UserProfileDto?> GetByEmailAsync(string email);
+  Task<UserProfileDto> AddUserProfileAsync(AddUserProfileDto userProfileDto);
+  Task<UserProfileDto> UpdateUserProfileAsync(int id, UpdateUserProfileDto updatedProfile);
 }

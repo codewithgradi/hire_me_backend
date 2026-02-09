@@ -1,6 +1,6 @@
 public class UserProfile
 {
-  public Guid Id { get; set; }
+  public int Id { get; set; }
   public string? AppUserId { get; set; }
   public string FirstName { get; set; } = string.Empty;
   public string Surname { get; set; } = string.Empty;

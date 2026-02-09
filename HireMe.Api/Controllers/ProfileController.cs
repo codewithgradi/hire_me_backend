@@ -16,7 +16,7 @@ public class ProfileController : ControllerBase
   {
     var user = await _profileRepo.GetByEmailAsync(email);
     if (user == null) return NotFound("User not found");
-    return Ok(user.ToUserProfileDto());
+    return Ok(user);
   }
   [HttpPost]
   [Authorize]
@@ -24,14 +24,14 @@ public class ProfileController : ControllerBase
   {
     var user = await _profileRepo.AddUserProfileAsync(addUser);
     if (user == null) return BadRequest();
-    return Ok(user.ToUserProfileDto());
+    return Ok(user);
   }
   [HttpPut("{id:guid}")]
   [Authorize]
-  public async Task<IActionResult> UpdateUserProfile(Guid id, UpdateUserProfileDto updateUser)
+  public async Task<IActionResult> UpdateUserProfile(int id, UpdateUserProfileDto updateUser)
   {
     var user = await _profileRepo.UpdateUserProfileAsync(id, updateUser);
     if (user == null) return BadRequest();
-    return Ok(user.ToUserProfileDto());
+    return Ok(user);
   }
 }

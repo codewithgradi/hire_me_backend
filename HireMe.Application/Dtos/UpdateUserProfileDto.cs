@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 public class UpdateUserProfileDto
 {
-  public Guid Id { get; set; }
   [MinLength(3, ErrorMessage = "First name should have at least 3 characters.")]
   public string FirstName { get; set; } = string.Empty;
   [MinLength(3, ErrorMessage = "Surname should have at least 3 characters.")]
