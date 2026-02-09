@@ -62,20 +62,26 @@ public class AuthController : ControllerBase
   public async Task<IActionResult> RegisterAsync(CreateUser userRegister)
   {
     var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == userRegister.Email);
-    if (user == null) return Unauthorized("User already exists");
+    if (user != null) return Unauthorized("User exists");
     try
     {
       var appUser = new AppUser
       {
-        Email = userRegister.Email
+        Email = userRegister.Email,
+        UserName = userRegister.Email
       };
+
       var createdUser = await _userManager.CreateAsync(appUser, userRegister.Password!);
       if (!createdUser.Succeeded) return StatusCode(500, createdUser.Errors);
+
       var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
       if (!roleResult.Succeeded) return StatusCode(500, roleResult.Errors);
-      var AccessToken = _tokenService.CreateToken(user);
+
+      var AccessToken = _tokenService.CreateToken(appUser);
       var RefreshToken = _tokenService.GenerateRefreshToken();
+
       appUser.RefreshToken = RefreshToken;
+
       return Ok(new NewUserDto
       {
         Email = appUser.Email,

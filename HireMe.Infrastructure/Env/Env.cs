@@ -2,7 +2,6 @@ public static class Env
 {
   public static class ConnectionStrings
   {
-    // Double underscores match the 'Settings__DevDB' format in your .env
     public static string DevDB => GetRequired("Settings__DevDB");
     public static string ProdDB => GetRequired("Settings__ProdDB");
   }

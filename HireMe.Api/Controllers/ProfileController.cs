@@ -10,7 +10,7 @@ public class ProfileController : ControllerBase
   {
     _profileRepo = profileRepo;
   }
-  [HttpGet("{email:string}")]
+  [HttpGet("{email}")]
   [Authorize]
   public async Task<IActionResult> GetUser([FromRoute] string email)
   {

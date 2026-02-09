@@ -14,7 +14,7 @@ public class TokenService : ITokenService
     _config = config;//to pull staf from appsetings json
     _key = new SymmetricSecurityKey
     (Encoding.UTF8.GetBytes
-    (_config["JWT:SigningKey"]!));
+    (_config["Settings:SigningKey"]!));
   }
   public string CreateToken(AppUser user)
   {
