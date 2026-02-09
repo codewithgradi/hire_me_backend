@@ -20,6 +20,10 @@ public static class ServiceExtentions
       {
         opt.UseSqlServer(Env.ConnectionStrings.ProdDB);
       }
+      else
+      {
+        opt.UseSqlServer(Env.ConnectionStrings.DevDB);
+      }
     });
   }
   public static void AddAuthConfigurations(this IServiceCollection services, IConfiguration configuration)

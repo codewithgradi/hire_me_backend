@@ -1,13 +1,11 @@
 public static class Env
 {
-  // Connection Strings
   public static class ConnectionStrings
   {
     public static string DevDB => Environment.GetEnvironmentVariable("Settings__DevDB") ?? "";
     public static string ProdDB => Environment.GetEnvironmentVariable("Settings__ProdDB") ?? "";
   }
 
-  // JWT Settings
   public static class JWT
   {
     public static string Issuer => Environment.GetEnvironmentVariable("Settings__Issuer") ?? "";
