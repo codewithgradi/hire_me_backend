@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,25 +11,29 @@ public class ProfileController : ControllerBase
   {
     _profileRepo = profileRepo;
   }
-  [HttpGet("{email}")]
+  [HttpGet("{id:int}")]
   [Authorize]
-  public async Task<IActionResult> GetUser([FromRoute] string email)
+  public async Task<IActionResult> GetUser([FromRoute] int id)
   {
-    var user = await _profileRepo.GetByEmailAsync(email);
+    var user = await _profileRepo.GetByidAsync(id);
     if (user == null) return NotFound("User not found");
     return Ok(user);
   }
-  [HttpPost]
+  [HttpPost("{appId}")]
   [Authorize]
-  public async Task<IActionResult> AddUser(AddUserProfileDto addUser)
+  public async Task<IActionResult> AddUser([FromRoute] string appId, [FromBody] AddUserProfileDto addUser)
   {
-    var user = await _profileRepo.AddUserProfileAsync(addUser);
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    if (string.IsNullOrEmpty(userId)) return Unauthorized();
+    addUser.AppUserId = userId;
+    addUser.Email = User.FindFirstValue(ClaimTypes.Email);
+    var user = await _profileRepo.AddUserProfileAsync(appId, addUser);
     if (user == null) return BadRequest();
     return Ok(user);
   }
-  [HttpPut("{id:guid}")]
+  [HttpPut("{id:int}")]
   [Authorize]
-  public async Task<IActionResult> UpdateUserProfile(int id, UpdateUserProfileDto updateUser)
+  public async Task<IActionResult> UpdateUserProfile([FromRoute] int id, [FromBody] UpdateUserProfileDto updateUser)
   {
     var user = await _profileRepo.UpdateUserProfileAsync(id, updateUser);
     if (user == null) return BadRequest();

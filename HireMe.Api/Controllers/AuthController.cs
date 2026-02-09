@@ -74,7 +74,7 @@ public class AuthController : ControllerBase
       var createdUser = await _userManager.CreateAsync(appUser, userRegister.Password!);
       if (!createdUser.Succeeded) return StatusCode(500, createdUser.Errors);
 
-      var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
+      var roleResult = await _userManager.AddToRoleAsync(appUser, "USER");
       if (!roleResult.Succeeded) return StatusCode(500, roleResult.Errors);
 
       var AccessToken = _tokenService.CreateToken(appUser);

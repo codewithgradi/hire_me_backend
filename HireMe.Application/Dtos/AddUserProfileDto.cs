@@ -8,9 +8,10 @@ public class AddUserProfileDto
   [MinLength(10, ErrorMessage = "Number must be 10 digits long")]
   public string PhoneNumber { get; set; } = string.Empty;
   public QualificationType Qualification { get; set; }
+  public string? AppUserId { get; set; }
   public string? Email { get; set; }
-  public string LinkedInUrl { get; set; } = string.Empty;
+  public string LinkedInUsername { get; set; } = string.Empty;
   public string? Institution { get; set; }
-  public string GitHubUrl { get; set; } = string.Empty;
+  public string GitHubUsername { get; set; } = string.Empty;
   public string PersonalWebsite { get; set; } = string.Empty;
 }

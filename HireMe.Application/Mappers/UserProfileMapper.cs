@@ -1,46 +1,58 @@
+
 public static class UserProfileMapper
 {
-  public static UserProfileDto ToUserProfileDto(this UserProfile profileDto)
+  private static string gitHubMainUrl { get; set; } = "https://www.github.com";
+  private static string linkedInMainUrl { get; set; } = "https://www.github.com";
+  public static UserProfileDto ToUserProfileDto(this UserProfile profile)
   {
     return new UserProfileDto
     {
-      Id = profileDto.Id,
+      Id = profile.Id,
+      FirstName = profile.FirstName,
+      Surname = profile.Surname,
+      Email = profile.Email,
+      Institution = profile.Institution,
+
+      GitHubUrl = profile.GitHubUrl.StartsWith("http")
+                    ? profile.GitHubUrl
+                    : $"{gitHubMainUrl}/{profile.GitHubUrl}",
+
+      LinkedInUrl = profile.LinkedInUrl.StartsWith("http")
+                      ? profile.LinkedInUrl
+                      : $"{linkedInMainUrl}/{profile.LinkedInUrl}",
+
+      PersonalWebsite = profile.PersonalWebsite,
+      PhoneNumber = profile.PhoneNumber,
+      Qualification = profile.Qualification,
+      AppUserId = profile.AppUserId
+    };
+  }
+  public static UserProfileDto ToUserProfileDtoFromAdd(this AddUserProfileDto profileDto)
+  {
+
+    return new UserProfileDto
+    {
       FirstName = profileDto.FirstName,
       Surname = profileDto.Surname,
       Email = profileDto.Email,
-      GitHubUrl = profileDto.GitHubUrl,
+      GitHubUrl = $"{gitHubMainUrl}/{profileDto.GitHubUsername}",
+      LinkedInUrl = $"{linkedInMainUrl}/{profileDto.LinkedInUsername}",
       Institution = profileDto.Institution,
-      LinkedInUrl = profileDto.LinkedInUrl,
       PersonalWebsite = profileDto.PersonalWebsite,
       PhoneNumber = profileDto.PhoneNumber,
       Qualification = profileDto.Qualification
     };
   }
-  public static UserProfile ToUserProfile(this AddUserProfileDto profileDto)
+  public static UserProfile ToUserProfileFromAdd(this AddUserProfileDto profileDto)
   {
     return new UserProfile
     {
       FirstName = profileDto.FirstName,
       Surname = profileDto.Surname,
-      Email = profileDto.Email!,
-      GitHubUrl = profileDto.GitHubUrl,
+      Email = profileDto.Email,
+      GitHubUrl = $"{gitHubMainUrl}/{profileDto.GitHubUsername}",
+      LinkedInUrl = $"{linkedInMainUrl}/{profileDto.LinkedInUsername}",
       Institution = profileDto.Institution,
-      LinkedInUrl = profileDto.LinkedInUrl,
-      PersonalWebsite = profileDto.PersonalWebsite,
-      PhoneNumber = profileDto.PhoneNumber,
-      Qualification = profileDto.Qualification
-    };
-  }
-  public static UserProfileDto ToUserProfileDtoFromAdd(this AddUserProfileDto profileDto)
-  {
-    return new UserProfileDto
-    {
-      FirstName = profileDto.FirstName,
-      Surname = profileDto.Surname,
-      Email = profileDto.Email!,
-      GitHubUrl = profileDto.GitHubUrl,
-      Institution = profileDto.Institution,
-      LinkedInUrl = profileDto.LinkedInUrl,
       PersonalWebsite = profileDto.PersonalWebsite,
       PhoneNumber = profileDto.PhoneNumber,
       Qualification = profileDto.Qualification

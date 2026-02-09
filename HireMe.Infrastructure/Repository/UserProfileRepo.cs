@@ -9,17 +9,20 @@ public class UserProfileRepo : IUserProfileRepo
     _context = context;
   }
 
-  public async Task<UserProfileDto> AddUserProfileAsync(AddUserProfileDto userProfileDto)
+  public async Task<UserProfileDto> AddUserProfileAsync(string appId, AddUserProfileDto userProfileDto)
   {
-    await _context.UserProfiles.AddAsync(userProfileDto.ToUserProfile());
+    if (await ProfileExists(appId)) return null;
+    var model = userProfileDto.ToUserProfileFromAdd();
+    await _context.UserProfiles.AddAsync(model);
     await _context.SaveChangesAsync();
-    return userProfileDto.ToUserProfileDtoFromAdd();
+
+    return model.ToUserProfileDto();
   }
 
 
-  public async Task<UserProfileDto?> GetByEmailAsync(string email)
+  public async Task<UserProfileDto?> GetByidAsync(int id)
   {
-    var UserProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Email == email);
+    var UserProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Id == id);
     if (UserProfile == null) return null;
     return UserProfile.ToUserProfileDto();
   }
@@ -40,6 +43,10 @@ public class UserProfileRepo : IUserProfileRepo
     _context.UserProfiles.Update(UserProfile);
     await _context.SaveChangesAsync();
     return UserProfile.ToUserProfileDto();
+  }
+  public async Task<bool> ProfileExists(string appUserId)
+  {
+    return await _context.UserProfiles.AnyAsync(x => x.AppUserId == appUserId);
   }
 }
 

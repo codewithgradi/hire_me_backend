@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json.Serialization;
 using dotenv.net;
 
 DotEnv.Load();
@@ -6,8 +7,11 @@ DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 
 builder.Services.AddOpenApi();
 
