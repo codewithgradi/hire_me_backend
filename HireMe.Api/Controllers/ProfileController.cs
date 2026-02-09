@@ -19,15 +19,15 @@ public class ProfileController : ControllerBase
     if (user == null) return NotFound("User not found");
     return Ok(user);
   }
-  [HttpPost("{appId}")]
+  [HttpPost]
   [Authorize]
-  public async Task<IActionResult> AddUser([FromRoute] string appId, [FromBody] AddUserProfileDto addUser)
+  public async Task<IActionResult> AddUser([FromBody] AddUserProfileDto addUser)
   {
     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     if (string.IsNullOrEmpty(userId)) return Unauthorized();
     addUser.AppUserId = userId;
     addUser.Email = User.FindFirstValue(ClaimTypes.Email);
-    var user = await _profileRepo.AddUserProfileAsync(appId, addUser);
+    var user = await _profileRepo.AddUserProfileAsync(userId, addUser);
     if (user == null) return BadRequest();
     return Ok(user);
   }
