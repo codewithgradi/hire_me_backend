@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
     try
     {
       var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
-      if (user == null) return Unauthorized("Invalid Credentials");
+      if (user == null) return NotFound("Invalid Credentials");
       var loginResult = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password!, false);
       if (!loginResult.Succeeded) return Unauthorized("Username or Password is incorrect");
       var AccessToken = _tokenService.CreateToken(user);
@@ -93,6 +93,30 @@ public class AuthController : ControllerBase
     {
       return StatusCode(500, e);
     }
+  }
+  [HttpPost("refresh")]
+  public async Task<IActionResult> Refresh([FromBody] TokenRequestDto tokenRequestDto)
+  {
+    if (tokenRequestDto == null) return BadRequest("Invalid client request");
+    var principal = _tokenService.GetClaimsPrincipalFromExpiredToken(tokenRequestDto.Token);
+    var email = principal.FindFirstValue(ClaimValueTypes.Email);
+    var user = await _userManager.FindByEmailAsync(email);
+    if (user == null ||
+    user.RefreshToken != tokenRequestDto.Token ||
+     user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+    {
+      return BadRequest("Invalid token");
+    }
+    var newAccessToken = _tokenService.CreateToken(user);
+    var newRefreshToken = _tokenService.GenerateRefreshToken();
+    user.RefreshToken = newRefreshToken;
+    await _userManager.UpdateAsync(user);
+    return Ok(new NewUserDto
+    {
+      Email = user.Email,
+      AccessToken = newAccessToken,
+      RefreshToken = newRefreshToken
+    });
   }
 
 
