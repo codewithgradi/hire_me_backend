@@ -100,7 +100,7 @@ public class AuthController : ControllerBase
   {
     if (tokenRequestDto == null) return BadRequest("Invalid client request");
 
-    var principal = _tokenService.GetClaimsPrincipalFromExpiredToken(tokenRequestDto.Token);
+    var principal = _tokenService.GetClaimsPrincipalFromExpiredToken(tokenRequestDto.AccessToken);
 
     var email = principal.FindFirstValue(ClaimTypes.Email)
     ?? principal.FindFirstValue(JwtRegisteredClaimNames.Email);
@@ -125,7 +125,7 @@ public class AuthController : ControllerBase
 
     return Ok(new TokenRequestDto
     {
-      Token = newAccessToken,
+      AccessToken = newAccessToken,
       RefreshToken = newRefreshToken
     });
   }

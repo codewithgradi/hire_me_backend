@@ -29,7 +29,7 @@ public class TokenService : ITokenService
     var tokenDescriptor = new SecurityTokenDescriptor
     {
       Subject = new ClaimsIdentity(claims),
-      Expires = DateTime.Now.AddMinutes(1),
+      Expires = DateTime.Now.AddMinutes(5),
       SigningCredentials = creds,
       Issuer = Env.JWT.Issuer,
       Audience = Env.JWT.Audience
@@ -48,6 +48,10 @@ public class TokenService : ITokenService
   }
   public ClaimsPrincipal GetClaimsPrincipalFromExpiredToken(string token)
   {
+    if (token.StartsWith("Bearer "))
+    {
+      token = token.Substring(7);
+    }
     var tokenValidationParameters = new TokenValidationParameters
     {
       ValidateAudience = false,
@@ -59,7 +63,7 @@ public class TokenService : ITokenService
     var tokenHandler = new JwtSecurityTokenHandler();
     var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
     if (securityToken is not JwtSecurityToken jwtSecurityToken ||
-      !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase)
+      !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha512, StringComparison.InvariantCultureIgnoreCase)
     ) throw new SecurityTokenException("Invalid token");
     return principal;
   }
