@@ -4,10 +4,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 public static class ServiceExtentions
 {
+
+  public static IServiceCollection AddJwtEnvInfrastructure(
+    this IServiceCollection services,
+    IConfiguration config
+
+    )
+  {
+    services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
+    services.AddScoped<ITokenService, TokenService>();
+    services.AddScoped<IUserProfileRepo, UserProfileRepo>();
+    return services;
+  }
   public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
   {
     services.AddDbContext<AppDbContext>(opt =>
@@ -28,8 +41,6 @@ public static class ServiceExtentions
   }
   public static void AddAuthConfigurations(this IServiceCollection services, IConfiguration configuration)
   {
-    services.AddScoped<ITokenService, TokenService>();
-
     services.AddControllers().AddNewtonsoftJson(
       opt =>
       {
@@ -63,8 +74,14 @@ public static class ServiceExtentions
       };
     });
   }
-  public static void AddScopedConfigurations(this IServiceCollection services)
+  public static void EnvironmentConfigurations(
+    this IServiceCollection services,
+    IConfiguration configuration
+
+    )
   {
-    services.AddScoped<IUserProfileRepo, UserProfileRepo>();
+    services.Configure<JwtSettings>(configuration.GetSection("JwtSetting"));
+    services.Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"));
+    services.Configure<OtherSetings>(configuration.GetSection("OtherSettings"));
   }
 }

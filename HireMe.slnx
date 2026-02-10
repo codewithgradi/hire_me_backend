@@ -3,4 +3,5 @@
   <Project Path="HireMe.Application/HireMe.Application.csproj" />
   <Project Path="HireMe.Domain/HireMe.Domain.csproj" />
   <Project Path="HireMe.Infrastructure/HireMe.Infrastructure.csproj" />
+  <Project Path="HireMe.Tests/HireMe.Tests.csproj" />
 </Solution>

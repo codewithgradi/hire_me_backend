@@ -3,18 +3,21 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 public class TokenService : ITokenService
 {
   private readonly IConfiguration _config;
   private readonly SymmetricSecurityKey _key;
-  public TokenService(IConfiguration config)
+  private readonly JwtSettings _jwtSettings;
+  public TokenService(IConfiguration config, IOptions<JwtSettings> jwtOptions)
   {
+    _jwtSettings = jwtOptions.Value;
     _config = config;
     _key = new SymmetricSecurityKey
     (Encoding.UTF8.GetBytes
-    (_config["Settings:SigningKey"]!));
+    (_jwtSettings.SigningKey!));
   }
   public string CreateToken(AppUser user)
   {
@@ -31,8 +34,8 @@ public class TokenService : ITokenService
       Subject = new ClaimsIdentity(claims),
       Expires = DateTime.Now.AddMinutes(5),
       SigningCredentials = creds,
-      Issuer = Env.JWT.Issuer,
-      Audience = Env.JWT.Audience
+      Issuer = _jwtSettings.Issuer,
+      Audience = _jwtSettings.Audience
 
     };
     var tokenHandler = new JwtSecurityTokenHandler();
