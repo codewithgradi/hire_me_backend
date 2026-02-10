@@ -11,7 +11,7 @@ public class TokenService : ITokenService
   private readonly SymmetricSecurityKey _key;
   public TokenService(IConfiguration config)
   {
-    _config = config;//to pull staf from appsetings json
+    _config = config;
     _key = new SymmetricSecurityKey
     (Encoding.UTF8.GetBytes
     (_config["Settings:SigningKey"]!));
@@ -29,7 +29,7 @@ public class TokenService : ITokenService
     var tokenDescriptor = new SecurityTokenDescriptor
     {
       Subject = new ClaimsIdentity(claims),
-      Expires = DateTime.Now.AddMinutes(10),
+      Expires = DateTime.Now.AddMinutes(1),
       SigningCredentials = creds,
       Issuer = Env.JWT.Issuer,
       Audience = Env.JWT.Audience

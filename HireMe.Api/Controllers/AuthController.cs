@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,7 +24,7 @@ public class AuthController : ControllerBase
     try
     {
       var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
-      if (user == null) return NotFound("Invalid Credentials");
+      if (user == null) return Unauthorized("Invalid Credentials");
       var loginResult = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password!, false);
       if (!loginResult.Succeeded) return Unauthorized("Username or Password is incorrect");
       var AccessToken = _tokenService.CreateToken(user);
@@ -98,26 +99,35 @@ public class AuthController : ControllerBase
   public async Task<IActionResult> Refresh([FromBody] TokenRequestDto tokenRequestDto)
   {
     if (tokenRequestDto == null) return BadRequest("Invalid client request");
+
     var principal = _tokenService.GetClaimsPrincipalFromExpiredToken(tokenRequestDto.Token);
-    var email = principal.FindFirstValue(ClaimValueTypes.Email);
+
+    var email = principal.FindFirstValue(ClaimTypes.Email)
+    ?? principal.FindFirstValue(JwtRegisteredClaimNames.Email);
+
+    if (string.IsNullOrEmpty(email)) return BadRequest("Invalid token claims");
+
     var user = await _userManager.FindByEmailAsync(email);
+
     if (user == null ||
-    user.RefreshToken != tokenRequestDto.Token ||
-     user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        user.RefreshToken != tokenRequestDto.RefreshToken ||
+        user.RefreshTokenExpiryTime <= DateTime.UtcNow)
     {
-      return BadRequest("Invalid token");
+      return BadRequest("Invalid refresh token or session expired");
     }
+
     var newAccessToken = _tokenService.CreateToken(user);
     var newRefreshToken = _tokenService.GenerateRefreshToken();
+
     user.RefreshToken = newRefreshToken;
+    user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
     await _userManager.UpdateAsync(user);
-    return Ok(new NewUserDto
+
+    return Ok(new TokenRequestDto
     {
-      Email = user.Email,
-      AccessToken = newAccessToken,
+      Token = newAccessToken,
       RefreshToken = newRefreshToken
     });
   }
-
 
 }
