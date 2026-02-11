@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -12,9 +13,15 @@ public class AuthController : ControllerBase
   private readonly SignInManager<AppUser> _signInManager;
   private readonly UserManager<AppUser> _userManager;
   private readonly ITokenService _tokenService;
-  public AuthController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signInManager)
+  private readonly OtherSetings _otherSettings;
+  public AuthController(
+    IOptions<OtherSetings> otherSettings,
+    UserManager<AppUser> userManager,
+    ITokenService tokenService,
+    SignInManager<AppUser> signInManager)
   {
     _signInManager = signInManager;
+    _otherSettings = otherSettings.Value;
     _userManager = userManager;
     _tokenService = tokenService;
   }
@@ -128,6 +135,54 @@ public class AuthController : ControllerBase
       AccessToken = newAccessToken,
       RefreshToken = newRefreshToken
     });
+  }
+  [HttpGet("login-google")]
+  public IActionResult LoginGoogle()
+  {
+    var redirectUrl = Url.Action("GoogleResponse", "Auth");
+    var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+    return Challenge(properties, "Google");
+  }
+  [HttpGet("google-response")]
+  public async Task<IActionResult> GoogleResponse()
+  {
+
+    var info = await _signInManager.GetExternalLoginInfoAsync();
+    if (info == null) return BadRequest("External login info missing.");
+
+    var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+    var user = await _userManager.FindByEmailAsync(email);
+
+    if (user == null)
+    {
+      user = new AppUser
+      {
+        UserName = email,
+        Email = email,
+        EmailConfirmed = true
+      };
+      var createResult = await _userManager.CreateAsync(user);
+      if (!createResult.Succeeded) return BadRequest(createResult.Errors);
+    }
+    else
+    {
+      var existingLogins = await _userManager.GetLoginsAsync(user);
+      var isLinked = existingLogins.Any(x => x.LoginProvider == "Google");
+
+      if (!isLinked)
+      {
+        var linkResult = await _userManager.AddLoginAsync(user, info);
+        if (!linkResult.Succeeded) return BadRequest("Failed to link Google account.");
+      }
+    }
+
+    var accessToken = _tokenService.CreateToken(user);
+    var refreshToken = _tokenService.GenerateRefreshToken();
+    user.RefreshToken = refreshToken;
+    user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+    await _userManager.UpdateAsync(user);
+
+    return Redirect($"{_otherSettings.FrontEndUrl}/auth-success?token={accessToken}&refreshToken={refreshToken}");
   }
 
 }

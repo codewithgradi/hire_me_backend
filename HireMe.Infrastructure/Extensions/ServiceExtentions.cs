@@ -62,11 +62,11 @@ public static class ServiceExtentions
       opt.Password.RequiredLength = 8;
     })
     .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders(); // Good to have for password resets/email confirms
+    .AddDefaultTokenProviders();
 
     services.AddAuthentication(opt =>
     {
-      // Keep JWT as the default for your API calls
+      // Keep JWT as the default for  API calls
       opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
       opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })

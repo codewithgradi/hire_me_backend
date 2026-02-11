@@ -18,4 +18,5 @@ public class ConnectionStrings
 public class OtherSetings
 {
   public string? CurrentEnvironment { get; set; }
+  public string? FrontEndUrl { get; set; }
 }
