@@ -21,26 +21,37 @@ public static class ServiceExtentions
     services.AddScoped<IUserProfileRepo, UserProfileRepo>();
     return services;
   }
-  public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
+  public static void ConfigureSqlContext(
+    this IServiceCollection services,
+    IConfiguration config)
   {
+    var connStrings = new ConnectionStrings();
+    config.GetSection("ConnectionStrings").Bind(connStrings);
+
+    var otherSettings = new OtherSetings();
+    config.GetSection("OtherSettings").Bind(otherSettings);
+
     services.AddDbContext<AppDbContext>(opt =>
     {
-      if (Env.OTHER._Environment == "dev")
+      if (otherSettings.CurrentEnvironment == "dev")
       {
-        opt.UseSqlServer(Env.ConnectionStrings.DevDB);
+        opt.UseSqlServer(connStrings.DevDB);
       }
-      else if (Env.OTHER._Environment == "prod")
+      else if (otherSettings.CurrentEnvironment == "prod")
       {
-        opt.UseSqlServer(Env.ConnectionStrings.ProdDB);
+        opt.UseSqlServer(connStrings.ProdDB);
       }
       else
       {
-        opt.UseSqlServer(Env.ConnectionStrings.DevDB);
+        opt.UseSqlServer(connStrings.DevDB);
       }
     });
   }
   public static void AddAuthConfigurations(this IServiceCollection services, IConfiguration configuration)
   {
+    var jwtSettings = new JwtSettings();
+    configuration.GetSection("JwtSettings").Bind(jwtSettings);
+
     services.AddControllers().AddNewtonsoftJson(
       opt =>
       {
@@ -66,9 +77,9 @@ public static class ServiceExtentions
       opt.TokenValidationParameters = new TokenValidationParameters
       {
         ValidateIssuer = true,
-        ValidIssuer = Env.JWT.Issuer,
+        ValidIssuer = jwtSettings.Issuer,
         ValidateAudience = true,
-        ValidAudience = Env.JWT.Audience,
+        ValidAudience = jwtSettings.Audience,
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Env.JWT.SigningKey))
       };
