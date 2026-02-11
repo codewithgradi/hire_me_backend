@@ -89,12 +89,14 @@ public class AuthController : ControllerBase
       var RefreshToken = _tokenService.GenerateRefreshToken();
 
       appUser.RefreshToken = RefreshToken;
+      appUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+      await _userManager.UpdateAsync(appUser);
 
       return Ok(new NewUserDto
       {
         Email = appUser.Email,
-        AccessToken = "",
-        RefreshToken = "",
+        AccessToken = AccessToken,
+        RefreshToken = RefreshToken,
       });
     }
     catch (Exception e)
