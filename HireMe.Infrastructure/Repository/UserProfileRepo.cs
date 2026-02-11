@@ -33,7 +33,6 @@ public class UserProfileRepo : IUserProfileRepo
     var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(x => x.Id == id);
     if (userProfile == null) return null!;
 
-    // Basic validation: Don't allow overwriting with NULL if the DB requires it
     if (!string.IsNullOrEmpty(updatedProfile.Email))
     {
       userProfile.Email = updatedProfile.Email;

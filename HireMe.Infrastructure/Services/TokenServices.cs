@@ -8,13 +8,11 @@ using Microsoft.IdentityModel.Tokens;
 
 public class TokenService : ITokenService
 {
-  private readonly IConfiguration _config;
   private readonly SymmetricSecurityKey _key;
   private readonly JwtSettings _jwtSettings;
-  public TokenService(IConfiguration config, IOptions<JwtSettings> jwtOptions)
+  public TokenService(IOptions<JwtSettings> jwtOptions)
   {
     _jwtSettings = jwtOptions.Value;
-    _config = config;
     _key = new SymmetricSecurityKey
     (Encoding.UTF8.GetBytes
     (_jwtSettings.SigningKey!));

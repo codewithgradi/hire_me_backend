@@ -60,6 +60,9 @@ public static class ServiceExtentions
     );
     services.AddIdentity<AppUser, IdentityRole>(opt =>
     {
+      var jwtSettings = new JwtSettings();
+      configuration.GetSection("JwtSettings").Bind(jwtSettings);
+
       opt.Password.RequiredLength = 8;
     }).AddEntityFrameworkStores<AppDbContext>();
 
@@ -81,7 +84,7 @@ public static class ServiceExtentions
         ValidateAudience = true,
         ValidAudience = jwtSettings.Audience,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Env.JWT.SigningKey))
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSettings.SigningKey!))
       };
     });
   }
