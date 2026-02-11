@@ -4,6 +4,11 @@ public class JwtSettings
   public string? Audience { get; set; }
   public string? SigningKey { get; set; }
 }
+public class GoogleSettings
+{
+  public string? ClientId { get; set; }
+  public string? ClientSecret { get; set; }
+}
 public class ConnectionStrings
 {
   public string? DevDB { get; set; }

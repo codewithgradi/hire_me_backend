@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-
+using Microsoft.AspNetCore.Authentication.Google;
 public static class ServiceExtentions
 {
 
@@ -52,30 +52,31 @@ public static class ServiceExtentions
     var jwtSettings = new JwtSettings();
     configuration.GetSection("JwtSettings").Bind(jwtSettings);
 
-    services.AddControllers().AddNewtonsoftJson(
-      opt =>
-      {
-        opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-      }
-    );
+    services.AddControllers().AddNewtonsoftJson(opt =>
+    {
+      opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    });
+
     services.AddIdentity<AppUser, IdentityRole>(opt =>
     {
-      var jwtSettings = new JwtSettings();
-      configuration.GetSection("JwtSettings").Bind(jwtSettings);
-
       opt.Password.RequiredLength = 8;
-    }).AddEntityFrameworkStores<AppDbContext>();
+    })
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders(); // Good to have for password resets/email confirms
 
     services.AddAuthentication(opt =>
     {
-      opt.DefaultAuthenticateScheme =
-      opt.DefaultChallengeScheme =
-      opt.DefaultForbidScheme =
-      opt.DefaultScheme =
-      opt.DefaultSignInScheme =
-      opt.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
-
-    }).AddJwtBearer(opt =>
+      // Keep JWT as the default for your API calls
+      opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+      opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddCookie()
+    .AddGoogle(googleOptions =>
+    {
+      googleOptions.ClientId = configuration["Google:ClientId"]!;
+      googleOptions.ClientSecret = configuration["Google:ClientSecret"]!;
+    })
+    .AddJwtBearer(opt =>
     {
       opt.TokenValidationParameters = new TokenValidationParameters
       {
