@@ -11,6 +11,6 @@ public class UserProfile
   public string? Institution { get; set; }
   public string GitHubUrl { get; set; } = string.Empty;
   public string PersonalWebsite { get; set; } = string.Empty;
-
+  public string? QualificationName { get; set; }
   public AppUser? AppUser { get; set; }
 }

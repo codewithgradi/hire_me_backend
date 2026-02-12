@@ -13,6 +13,8 @@ public class UpdateUserProfileDto
   public string? Email { get; set; }
   public string LinkedInUrl { get; set; } = string.Empty;
   public string? Institution { get; set; }
+  public string? QualificationName { get; set; }
+
   public string GitHubUrl { get; set; } = string.Empty;
   public string PersonalWebsite { get; set; } = string.Empty;
 }

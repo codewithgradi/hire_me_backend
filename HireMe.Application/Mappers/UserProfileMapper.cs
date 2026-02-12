@@ -24,6 +24,7 @@ public static class UserProfileMapper
       PersonalWebsite = profile.PersonalWebsite,
       PhoneNumber = profile.PhoneNumber,
       Qualification = profile.Qualification,
+      QualificationName = profile.QualificationName,
       AppUserId = profile.AppUserId
     };
   }
@@ -40,7 +41,8 @@ public static class UserProfileMapper
       Institution = profileDto.Institution,
       PersonalWebsite = profileDto.PersonalWebsite,
       PhoneNumber = profileDto.PhoneNumber,
-      Qualification = profileDto.Qualification
+      Qualification = profileDto.Qualification,
+      QualificationName = profileDto.QualificationName
     };
   }
   public static UserProfile ToUserProfileFromAdd(this AddUserProfileDto profileDto)
@@ -55,7 +57,8 @@ public static class UserProfileMapper
       Institution = profileDto.Institution,
       PersonalWebsite = profileDto.PersonalWebsite,
       PhoneNumber = profileDto.PhoneNumber,
-      Qualification = profileDto.Qualification
+      Qualification = profileDto.Qualification,
+      QualificationName = profileDto.QualificationName
     };
   }
 }
