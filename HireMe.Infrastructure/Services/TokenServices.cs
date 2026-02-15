@@ -25,8 +25,10 @@ public class TokenService : ITokenService
       new Claim(JwtRegisteredClaimNames.Email,user.Email!),
       new Claim(JwtRegisteredClaimNames.Name,user.Email!),
     };
+
     var creds = new SigningCredentials
     (_key, SecurityAlgorithms.HmacSha512Signature);
+
     var tokenDescriptor = new SecurityTokenDescriptor
     {
       Subject = new ClaimsIdentity(claims),
@@ -36,6 +38,7 @@ public class TokenService : ITokenService
       Audience = _jwtSettings.Audience
 
     };
+
     var tokenHandler = new JwtSecurityTokenHandler();
     var token = tokenHandler.CreateToken(tokenDescriptor);
     return tokenHandler.WriteToken(token);

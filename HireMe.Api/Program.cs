@@ -19,8 +19,6 @@ builder.Services.AddOpenApi();
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 //Dependency Injections from Infrastructure Layer
-
-
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.EnvironmentConfigurations(builder.Configuration);
 builder.Services.AddJwtEnvInfrastructure(builder.Configuration);

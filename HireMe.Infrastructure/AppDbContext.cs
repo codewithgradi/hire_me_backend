@@ -9,6 +9,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
   protected override void OnModelCreating(ModelBuilder builder)
   {
     base.OnModelCreating(builder);
+
     builder.Entity<AppUser>()
     .HasOne(x => x.UserProfile)
     .WithOne(x => x.AppUser)
@@ -35,10 +36,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
   }
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    // This tells EF Core: "I know there are changes, just let me run the command anyway"
     optionsBuilder.ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
   }
   public DbSet<UserProfile> UserProfiles { get; set; }
-
-
 }
