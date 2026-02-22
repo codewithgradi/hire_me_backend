@@ -91,11 +91,23 @@ public static class ServiceExtentions
   public static void EnvironmentConfigurations(
     this IServiceCollection services,
     IConfiguration configuration
-
     )
   {
     services.Configure<JwtSettings>(configuration.GetSection("JwtSetting"));
     services.Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"));
     services.Configure<OtherSetings>(configuration.GetSection("OtherSettings"));
+  }
+  public static void AddCorsForFrontend(this ServiceCollection services)
+  {
+    services.AddCors(opt =>
+    {
+      opt.AddPolicy("AllowNextJs", builder =>
+      {
+        builder.WithOrigins(["http://localhost:3000", "Prod frontend here"])
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+      });
+    });
   }
 }
