@@ -32,13 +32,26 @@ public class AuthController : ControllerBase
     {
       var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
       if (user == null) return Unauthorized("Invalid Credentials");
+
       var loginResult = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password!, false);
       if (!loginResult.Succeeded) return Unauthorized("Username or Password is incorrect");
+
       var AccessToken = _tokenService.CreateToken(user);
       var RefreshToken = _tokenService.GenerateRefreshToken();
+
+      Response.Cookies.Append("jwt", AccessToken, new CookieOptions
+      {
+        HttpOnly = true,
+        Secure = true,
+        SameSite = SameSiteMode.Strict,
+        Expires = DateTime.UtcNow.AddMinutes(5)
+      });
+
       user.RefreshToken = RefreshToken;
       user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
       await _userManager.UpdateAsync(user);
+
       return Ok(new NewUserDto
       {
         Email = loginDto.Email,
@@ -58,10 +71,13 @@ public class AuthController : ControllerBase
   {
     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
     if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
     var user = await _userManager.FindByIdAsync(userId);
     if (user == null) return NotFound("User not found in Database.");
+
     user.RefreshToken = null;
     user.RefreshTokenExpiryTime = null;
+
     await _userManager.UpdateAsync(user);
     return Ok("Logged out successfully.");
   }
@@ -90,6 +106,7 @@ public class AuthController : ControllerBase
 
       appUser.RefreshToken = RefreshToken;
       appUser.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
       await _userManager.UpdateAsync(appUser);
 
       return Ok(new NewUserDto
@@ -108,7 +125,6 @@ public class AuthController : ControllerBase
   public async Task<IActionResult> Refresh([FromBody] TokenRequestDto tokenRequestDto)
   {
     if (tokenRequestDto == null) return BadRequest("Invalid client request");
-
     var principal = _tokenService.GetClaimsPrincipalFromExpiredToken(tokenRequestDto.AccessToken);
 
     var email = principal.FindFirstValue(ClaimTypes.Email)

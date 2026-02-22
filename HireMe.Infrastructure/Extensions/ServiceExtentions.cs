@@ -66,7 +66,6 @@ public static class ServiceExtentions
 
     services.AddAuthentication(opt =>
     {
-      // Keep JWT as the default for  API calls
       opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
       opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })
