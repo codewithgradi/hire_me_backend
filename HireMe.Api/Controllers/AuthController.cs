@@ -43,7 +43,7 @@ public class AuthController : ControllerBase
       {
         HttpOnly = true,
         Secure = true,
-        SameSite = SameSiteMode.Strict,
+        SameSite = SameSiteMode.None,
         Expires = DateTime.UtcNow.AddMinutes(5)
       });
 
@@ -55,7 +55,6 @@ public class AuthController : ControllerBase
       return Ok(new NewUserDto
       {
         Email = loginDto.Email,
-        AccessToken = AccessToken,
         RefreshToken = RefreshToken,
       });
     }
@@ -112,7 +111,6 @@ public class AuthController : ControllerBase
       return Ok(new NewUserDto
       {
         Email = appUser.Email,
-        AccessToken = AccessToken,
         RefreshToken = RefreshToken,
       });
     }
