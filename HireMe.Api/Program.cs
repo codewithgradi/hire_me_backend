@@ -7,6 +7,19 @@ DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Cross Origins
+builder.Services.AddCors(opt =>
+    {
+        opt.AddPolicy("AllowNextJs", builder =>
+        {
+            builder.WithOrigins("http://localhost:3000")
+          .AllowAnyMethod()
+          .AllowAnyHeader()
+          .AllowCredentials();
+        });
+    });
+
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -24,17 +37,6 @@ builder.Services.EnvironmentConfigurations(builder.Configuration);
 builder.Services.AddJwtEnvInfrastructure(builder.Configuration);
 builder.Services.AddAuthConfigurations(builder.Configuration);
 
-//Cross Origins
-builder.Services.AddCors(opt =>
-    {
-        opt.AddPolicy("AllowNextJs", builder =>
-        {
-            builder.WithOrigins(["http://localhost:3000", "Prod frontend here"])
-          .AllowAnyMethod()
-          .AllowAnyHeader()
-          .AllowCredentials();
-        });
-    });
 
 
 
@@ -47,6 +49,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//for CORS
+app.UseRouting();
+
+//For CORS
+app.UseCors("AllowNextJs");
 
 app.UseAuthentication();
 
