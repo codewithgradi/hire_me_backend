@@ -86,6 +86,14 @@ public static class ServiceExtentions
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(jwtSettings.SigningKey!))
       };
+      opt.Events = new JwtBearerEvents
+      {
+        OnMessageReceived = context =>
+        {
+          context.Token = context.Request.Cookies["jwt"];
+          return Task.CompletedTask;
+        }
+      };
     });
   }
   public static void EnvironmentConfigurations(
@@ -97,7 +105,7 @@ public static class ServiceExtentions
     services.Configure<ConnectionStrings>(configuration.GetSection("ConnectionStrings"));
     services.Configure<OtherSetings>(configuration.GetSection("OtherSettings"));
   }
-  public static void AddCorsForFrontend(this ServiceCollection services)
+  public static void AddCorsForFrontend(this IServiceCollection services)
   {
     services.AddCors(opt =>
     {
