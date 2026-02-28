@@ -4321,11 +4321,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Infrastructure\\HireMe.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\hireme\\HireMe.Infrastructure\\HireMe.Infrastructure.csproj",
       "projectName": "HireMe.Infrastructure",
-      "projectPath": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Infrastructure\\HireMe.Infrastructure.csproj",
+      "projectPath": "C:\\Users\\User\\Desktop\\hireme\\HireMe.Infrastructure\\HireMe.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Infrastructure\\obj\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\hireme\\HireMe.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -4340,8 +4340,8 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Application\\HireMe.Application.csproj": {
-              "projectPath": "C:\\Users\\User\\Desktop\\HireMe\\HireMe.Application\\HireMe.Application.csproj"
+            "C:\\Users\\User\\Desktop\\hireme\\HireMe.Application\\HireMe.Application.csproj": {
+              "projectPath": "C:\\Users\\User\\Desktop\\hireme\\HireMe.Application\\HireMe.Application.csproj"
             }
           }
         }
@@ -4678,5 +4678,13 @@
         }
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    }
+  ]
 }

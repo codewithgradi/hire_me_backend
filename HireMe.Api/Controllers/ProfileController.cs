@@ -11,11 +11,15 @@ public class ProfileController : ControllerBase
   {
     _profileRepo = profileRepo;
   }
-  [HttpGet("{id:int}")]
+  [HttpGet("my-profile")]
   [Authorize]
-  public async Task<IActionResult> GetUser([FromRoute] int id)
+  public async Task<IActionResult> GetUser()
   {
-    var user = await _profileRepo.GetByidAsync(id);
+    var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+    if (id == null) return BadRequest("user not found");
+
+    var user = await _profileRepo.GetByidAsync(Convert.ToInt32(id));
     if (user == null) return NotFound("User not found");
     return Ok(user);
   }
@@ -31,11 +35,14 @@ public class ProfileController : ControllerBase
     if (user == null) return BadRequest();
     return Ok(user);
   }
-  [HttpPut("{id:int}")]
+  [HttpPut("my-profile")]
   [Authorize]
-  public async Task<IActionResult> UpdateUserProfile([FromRoute] int id, [FromBody] UpdateUserProfileDto updateUser)
+  public async Task<IActionResult> UpdateUserProfile([FromBody] UpdateUserProfileDto updateUser)
   {
-    var user = await _profileRepo.UpdateUserProfileAsync(id, updateUser);
+    var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    if (id == null) return BadRequest("user not found");
+
+    var user = await _profileRepo.UpdateUserProfileAsync(Convert.ToInt32(id), updateUser);
     if (user == null) return BadRequest();
     return Ok(user);
   }
