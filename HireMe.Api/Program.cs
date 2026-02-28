@@ -7,19 +7,6 @@ DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Cross Origins
-// builder.Services.AddCors(opt =>
-//     {
-//         opt.AddPolicy("AllowNextJs", policy =>
-//         {
-//             policy.WithOrigins("http://localhost:3000")
-//           .AllowAnyMethod()
-//           .AllowAnyHeader()
-//           .AllowCredentials();
-//         });
-//     });
-
-
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
